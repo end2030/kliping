@@ -5,17 +5,17 @@
 	<title>e-klipping</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0,initial-scale=1.0">
 	<!-- Flipbook StyleSheet -->
-	<link href="../dflip/css/dflip.min.css" rel="stylesheet" type="text/css">
+	<link href="./dflip/css/dflip.min.css" rel="stylesheet" type="text/css">
 	<!-- Icons Stylesheet -->
-	<link href="../dflip/css/themify-icons.min.css" rel="stylesheet" type="text/css">
-	<link href="./assets/css/font-awesome.css" rel="stylesheet" type="text/css">
-	<link href="./assets/css/style.css" rel="stylesheet" type="text/css">
+	<link href="./dflip/css/themify-icons.min.css" rel="stylesheet" type="text/css">
+	<link href="./reading/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
+	<link href="./reading/assets/css/style.css" rel="stylesheet" type="text/css">
 
 </head>
 <?php 	
 session_start();
-include '../custom/Pengunjung.php';
-$pengunjung=("./assets/pengunjung.json");
+include './custom/Pengunjung.php';
+$pengunjung=("./reading/assets/pengunjung.json");
 $data = '{"data":['.file_get_contents($pengunjung).']}';
 $dataPengunjung = json_decode($data);
 $pengunjung = array();
@@ -24,7 +24,7 @@ foreach ($dataPengunjung->data[count($dataPengunjung->data)-1] as $key => $value
 	$pengunjung['jml_kemarin'] = $value;
 };
 
-$counter = ("./assets/counter.json");
+$counter = ("./reading/assets/counter.json");
 $fileobj = json_decode(file_get_contents($counter));
 $now = date("Y-m-d");
 $client = new Pengunjung(); 
@@ -82,7 +82,7 @@ foreach($files as $file) {
 		<div class="row">
 			<div class="col-md-9 full-height leftpdf">
 				<div class="headright" id="mobile">
-					<img src="./assets/img/pdf_not_found.jpg" class="headimg">
+					<img src="./reading/assets/img/pdf_not_found.jpg" class="headimg">
 					<div id="login">
 						 <button type="button" class="btn btn-info" data-bs-toggle="modal"data-bs-target="#login-modal"><i class="fa fa-power-off" aria-hidden="true"></i></button>
 
@@ -96,14 +96,14 @@ foreach($files as $file) {
 					}else{
 						?>
 						<div class="col-md-9" style="height: 100%; bottom: 0px;">
-							<img class="nopdf" src='./assets/img/pdf_not_found.jpg' width='100px'/>
+							<img class="nopdf" src='./reading/assets/img/pdf_not_found.jpg' width='100px'/>
 						</div>
 						<?php
 					}
 				}else{
 					?>
 					<div class="col-md-9" style="height: 100%; bottom: 0px;">
-						<img class="nopdf" src='./assets/img/pdf_not_found.jpg' width='100px'/>
+						<img class="nopdf" src='./reading/assets/img/pdf_not_found.jpg' width='100px'/>
 					</div>
 					<?php
 				}
@@ -111,7 +111,7 @@ foreach($files as $file) {
 			</div>
 			<div class="col-md-3 rigthpdf">
 				<div class="headright" id="desktop">
-					<img src="./assets/img/pdf_not_found.jpg" class="headimg">
+					<img src="./reading/assets/img/pdf_not_found.jpg" class="headimg">
 					<div id="login">
 						 <!-- <button type="button" class="btn btn-info" data-bs-toggle="modal"data-bs-target="#login-modal"><i class="fa fa-power-off" aria-hidden="true"></i></button> -->
 					</div>
@@ -157,9 +157,9 @@ foreach($files as $file) {
 		</div>
  </div>
  <!-- jQuery  -->
- <script src="../dflip/js/libs/jquery.min.js" type="text/javascript"></script>
+ <script src="./dflip/js/libs/jquery.min.js" type="text/javascript"></script>
  <!-- Flipbook main Js file -->
- <script src="../dflip/js/dflip.min.js" type="text/javascript"></script>
+ <script src="./dflip/js/dflip.min.js" type="text/javascript"></script>
 </body>
 <!-- SignIn modal content -->
     <div id="login-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -168,9 +168,9 @@ foreach($files as $file) {
                 <div class="modal-body">
                     <div class="text-center mt-2 mb-4">
                         <a href="document.html" class="text-success">
-                        <span><img class="me-2" src="../material/src/assets/images/logo-icon.png"
+                        <span><img class="me-2" src="./material/src/assets/images/logo-icon.png"
                             alt="" height="18"><img
-                            src="../material/src/assets/images/logo-text.png" alt=""
+                            src="./material/src/assets/images/logo-text.png" alt=""
                             height="18"></span>
                         </a>
                     </div>

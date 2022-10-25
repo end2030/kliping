@@ -13,35 +13,34 @@
 
 </head>
 <?php 	
-session_start();
-include './custom/Pengunjung.php';
-$pengunjung=("./reading/assets/pengunjung.json");
-$data = '{"data":['.file_get_contents($pengunjung).']}';
-$dataPengunjung = json_decode($data);
-$pengunjung = array();
-foreach ($dataPengunjung->data[count($dataPengunjung->data)-1] as $key => $value) {
-	$pengunjung['tanggal_kemaren'] = $key;
-	$pengunjung['jml_kemarin'] = $value;
-};
+// session_start();
+// $pengunjung=("./reading/assets/pengunjung.json");
+// $data = '{"data":['.file_get_contents($pengunjung).']}';
+// $dataPengunjung = json_decode($data);
+// $pengunjung = array();
+// foreach ($dataPengunjung->data[count($dataPengunjung->data)-1] as $key => $value) {
+// 	$pengunjung['tanggal_kemaren'] = $key;
+// 	$pengunjung['jml_kemarin'] = $value;
+// };
 
-$counter = ("./reading/assets/counter.json");
-$fileobj = json_decode(file_get_contents($counter));
-$now = date("Y-m-d");
-$client = new Pengunjung(); 
-	// echo "IP anda adalah : ".$client->get_client_ip()."<br>";
-	// echo "Browser : ".$client->get_client_browser()."<br>";
-if (!isset($_SESSION['CREATED'])) {
-	$_SESSION['CREATED'] = time();
-} else if (time() - $_SESSION['CREATED'] > 1800) {
-	// session started more than 30 minutes ago
-	session_regenerate_id(true);   
-	$_SESSION['CREATED'] = time();  // update creation time
-	$kunjungan[$now] = $fileobj->{$now};
-	$kunjungan[$now] = $kunjungan[$now] + 1;
-	$file = fopen($counter,"w");
-	fwrite($file,json_encode($kunjungan));
-	fclose($file);
-}
+// $counter = ("./reading/assets/counter.json");
+// $fileobj = json_decode(file_get_contents($counter));
+// $now = date("Y-m-d");
+// $client = new Pengunjung(); 
+// 	// echo "IP anda adalah : ".$client->get_client_ip()."<br>";
+// 	// echo "Browser : ".$client->get_client_browser()."<br>";
+// if (!isset($_SESSION['CREATED'])) {
+// 	$_SESSION['CREATED'] = time();
+// } else if (time() - $_SESSION['CREATED'] > 1800) {
+// 	// session started more than 30 minutes ago
+// 	session_regenerate_id(true);   
+// 	$_SESSION['CREATED'] = time();  // update creation time
+// 	$kunjungan[$now] = $fileobj->{$now};
+// 	$kunjungan[$now] = $kunjungan[$now] + 1;
+// 	$file = fopen($counter,"w");
+// 	fwrite($file,json_encode($kunjungan));
+// 	fclose($file);
+// }
 
 $bulanarray = array(
 	"01"=>"Januari",

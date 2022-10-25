@@ -10,7 +10,8 @@
 	<link href="./flips/css/themify-icons.min.css" rel="stylesheet" type="text/css">
 	<link href="./reading/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
 	<link href="./reading/assets/css/style.css" rel="stylesheet" type="text/css">
-
+	<link href="./js/sweetalert2.css" rel="stylesheet" type="text/css" />
+	<script src="./js/sweetalert2.min.js"></script>
 </head>
 <?php 	
 // session_start();
@@ -84,7 +85,7 @@ foreach($files as $file) {
 					<img src="./reading/assets/img/pdf_not_found.jpg" class="headimg">
 					<div id="login">
 						 <button type="button" class="btn btn-info" data-bs-toggle="modal"data-bs-target="#login-modal"><i class="fa fa-power-off" aria-hidden="true"></i></button>
-
+						
 					</div>
 				</div>
 				<?php
@@ -110,7 +111,48 @@ foreach($files as $file) {
 			</div>
 			<div class="col-md-3 rigthpdf">
 				<div class="headright" id="desktop">
-					<img src="./reading/assets/img/pdf_not_found.jpg" class="headimg">
+					<form role="form" class="form-horizontal" method="post" id="formInput" name="formInput" enctype="multipart/form-data">
+
+						<div class="form-body">
+							<div class="form-group">
+								<label class="col-md-2 control-label">Nama Media Cetak</label>
+								<div class="col-md-10">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<input type="text" class="form-control" name="media_name" placeholder="Nama Media Cetak" autocomplete="off" autofocus />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-2 control-label">Tanggal</label>
+								<div class="col-md-10">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<input type="date" class="form-control" name="tanggal" placeholder="Tanggal" autocomplete="off" autofocus />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-2 control-label">File Upload</label>
+								<div class="col-md-10">
+									<div class="input-icon right">
+										<i class="fa"></i>
+										<input type="file" class="form-control" accept=".pdf" name="file_klipping" placeholder="File Klipping" autocomplete="off" autofocus />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions">
+							<div class="row">
+								<div class="col-md-offset-2 col-md-10">
+									<button type="submit" class="btn btn-success">
+										<i class="fa fa-floppy-o"></i> Simpan
+									</button>
+									<a href="<?=site_url('admin/klipping');?>" type="button" class="btn btn-warning"><i class="fa fa-times"></i> Batal</a>
+								</div>
+							</div>
+						</div>
+					</form>
 					<div id="login">
 						 <!-- <button type="button" class="btn btn-info" data-bs-toggle="modal"data-bs-target="#login-modal"><i class="fa fa-power-off" aria-hidden="true"></i></button> -->
 					</div>
@@ -245,7 +287,77 @@ foreach($files as $file) {
   	location.href="?tanggal="+tgl+"&title="+title;
   }
 </script>
+<script type="text/javascript" src="./js/bootstrap-fileinput.js"></script>
+<script type="text/javascript" src="./js/jquery.validate.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var form        = $('#formInput');
+    var error       = $('.alert-danger', form);
+    var success     = $('.alert-success', form);
 
+    $("#formInput").validate({
+        errorElement: 'span',
+        errorClass: 'help-block help-block-error',
+        focusInvalid: false,
+        ignore: "",
+        rules: {
+            tanggal: { required: true },
+            media_name: { required: true },
+            file_klipping: { required: true },
+            
+        },
+        messages: {
+            tanggal: { required :'Tanggal Klipping required' },
+            media_name: { required :'Nama Media Klipping required'},
+            file_klipping: { required :'File Klipping required' }
+        },
+        invalidHandler: function (event, validator) {
+            success.hide();
+            error.show();
+            Metronic.scrollTo(error, -200);
+        },
+        errorPlacement: function (error, element) {
+            var icon = $(element).parent('.input-icon').children('i');
+            icon.removeClass('fa-check').addClass("fa-warning");
+            icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').removeClass("has-success").addClass('has-error');
+        },
+        unhighlight: function (element) {
+        },
+        success: function (label, element) {
+            var icon = $(element).parent('.input-icon').children('i');
+            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+            icon.removeClass("fa-warning").addClass("fa-check");
+        },
+        submitHandler: function(form) {
+            dataString = new FormData($("#formInput")[0]);
+            $.ajax({
+                url: "<?='upload.php'?>",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: dataString,
+                success: function(data) {
+                    swal({
+                        title:"Sukses",
+                        text: "Simpan Data Sukses",
+                        showConfirmButton: false,
+                        type: "success",
+                        // timer: 2000
+                    }, function() {
+                        // window.location="<?=site_url('admin/klipping');?>";
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error Simpan Data');
+                }
+            });
+        }
+    });
+});
+</script>
 <style type="text/css">
 	@media (min-width: 768px){
 		#mobile {

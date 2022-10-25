@@ -5,9 +5,9 @@
 	<title>e-klipping</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0,initial-scale=1.0">
 	<!-- Flipbook StyleSheet -->
-	<link href="./dflip/css/dflip.min.css" rel="stylesheet" type="text/css">
+	<link href="./flips/css/dflip.min.css" rel="stylesheet" type="text/css">
 	<!-- Icons Stylesheet -->
-	<link href="./dflip/css/themify-icons.min.css" rel="stylesheet" type="text/css">
+	<link href="./flips/css/themify-icons.min.css" rel="stylesheet" type="text/css">
 	<link href="./reading/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
 	<link href="./reading/assets/css/style.css" rel="stylesheet" type="text/css">
 
@@ -157,9 +157,9 @@ foreach($files as $file) {
 		</div>
  </div>
  <!-- jQuery  -->
- <script src="./dflip/js/libs/jquery.min.js" type="text/javascript"></script>
+ <script src="./flips/js/libs/jquery.min.js" type="text/javascript"></script>
  <!-- Flipbook main Js file -->
- <script src="./dflip/js/dflip.min.js" type="text/javascript"></script>
+ <script src="./flips/js/dflip.min.js" type="text/javascript"></script>
 </body>
 <!-- SignIn modal content -->
     <div id="login-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">

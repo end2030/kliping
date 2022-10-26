@@ -310,6 +310,9 @@ if(!empty($_GET['tanggal'])){
 		padding-left: 20px;
 
 	}
+	.headmenu2{
+		color: antiquewhite;
+	}
 	.headmenu h4{
 		padding-top: 11px;
 		color: antiquewhite;

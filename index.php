@@ -9,40 +9,12 @@
 	<!-- Icons Stylesheet -->
 	<link href="./flips/css/themify-icons.min.css" rel="stylesheet" type="text/css">
 	<link href="./reading/assets/css/font-awesome.css" rel="stylesheet" type="text/css">
-	<link href="./reading/assets/css/style.css" rel="stylesheet" type="text/css">
-	<link href="./js/sweetalert2.css" rel="stylesheet" type="text/css" />
-	<script src="./js/sweetalert2.min.js"></script>
+	<!-- <link href="./reading/assets/css/style.css" rel="stylesheet" type="text/css"> -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <?php 	
-// session_start();
-// $pengunjung=("./reading/assets/pengunjung.json");
-// $data = '{"data":['.file_get_contents($pengunjung).']}';
-// $dataPengunjung = json_decode($data);
-// $pengunjung = array();
-// foreach ($dataPengunjung->data[count($dataPengunjung->data)-1] as $key => $value) {
-// 	$pengunjung['tanggal_kemaren'] = $key;
-// 	$pengunjung['jml_kemarin'] = $value;
-// };
-
-// $counter = ("./reading/assets/counter.json");
-// $fileobj = json_decode(file_get_contents($counter));
-// $now = date("Y-m-d");
-// $client = new Pengunjung(); 
-// 	// echo "IP anda adalah : ".$client->get_client_ip()."<br>";
-// 	// echo "Browser : ".$client->get_client_browser()."<br>";
-// if (!isset($_SESSION['CREATED'])) {
-// 	$_SESSION['CREATED'] = time();
-// } else if (time() - $_SESSION['CREATED'] > 1800) {
-// 	// session started more than 30 minutes ago
-// 	session_regenerate_id(true);   
-// 	$_SESSION['CREATED'] = time();  // update creation time
-// 	$kunjungan[$now] = $fileobj->{$now};
-// 	$kunjungan[$now] = $kunjungan[$now] + 1;
-// 	$file = fopen($counter,"w");
-// 	fwrite($file,json_encode($kunjungan));
-// 	fclose($file);
-// }
-
+error_reporting(0);
 $bulanarray = array(
 	"01"=>"Januari",
 	"02"=>"Februari",
@@ -57,28 +29,29 @@ $bulanarray = array(
 	"11"=>"Nopember",
 	"12"=>"Desember"
 );
-$tgl = $_GET['tanggal'];
-$id_tgl = explode("-", $tgl);
-$tgl_cari = $id_tgl[2]."-".$bulanarray[$id_tgl[1]]."-".$id_tgl[0];
-		// var_dump($tgl_cari);
-$files = glob('assets/books/*pdf');
-$pdf_file = array();
-foreach($files as $file) {
-	$str = explode("/", $file);
-	$filename = $str[count($str)-1];
-	$str2 =explode("_",$filename);
-	$tanggal_file = str_replace(".pdf", "", $str2[count($str2)-1]);
-	if ( $tgl_cari == $tanggal_file) {
-		$pdf_file['filepath'][] = $file;
-		$pdf_file['tgl'] = $tanggal_file;
-		for ($i=0; $i < count($str2)-1 ; $i++) { 
-			$pdf_file['title'] [$file] .= $str2[$i]." ";
+if(!empty($_GET['tanggal'])){
+	$pdf_file = array();
+	$tgl = $_GET['tanggal'];
+	$id_tgl = explode("-", $tgl);
+	$tgl_cari = $id_tgl[2]."-".$bulanarray[$id_tgl[1]]."-".$id_tgl[0];
+	$files = glob('reading/assets/books/*pdf');
+	foreach($files as $file) {
+		$str = explode("/", $file);
+		$filename = $str[count($str)-1];
+		$str2 =explode("_",$filename);
+		$tanggal_file = str_replace(".pdf", "", $str2[count($str2)-1]);
+		if ( $tgl_cari == $tanggal_file) {
+			$pdf_file['filepath'][] = $file;
+			$pdf_file['tgl'] = $tanggal_file;
+			for ($i=0; $i < count($str2)-1 ; $i++) { 
+				$pdf_file['title'][$file] .= $str2[$i]." ";
+			}
 		}
 	}
 }
 ?>
 <body>
-	<div class="container-fluit">
+	<div class="container">
 		<div class="row">
 			<div class="col-md-9 full-height leftpdf">
 				<div class="headright" id="mobile">
@@ -91,7 +64,7 @@ foreach($files as $file) {
 				<?php
 				if (!empty($pdf_file['filepath'])) {
 					if (!empty($_GET['title'])) {
-						$view = 'assets/books/'.str_replace(" ","_",$_GET['title']).'_'.$tgl_cari.'.pdf';
+						$view = 'reading/assets/books/'.str_replace(" ","_",$_GET['title']).'_'.$tgl_cari.'.pdf';
 						echo '<div class="_df_book full-height" webgl="true" backgroundcolor="grey"source="'.$view.'"id="df_manual_book"></div>';
 					}else{
 						?>
@@ -111,21 +84,20 @@ foreach($files as $file) {
 			</div>
 			<div class="col-md-3 rigthpdf">
 				<div class="headright" id="desktop">
-					<form role="form" class="form-horizontal" method="post" id="formInput" name="formInput" enctype="multipart/form-data">
-
+				<form role="form" action="upload.php" class="form-horizontal" method="post" id="formInput" name="formInput" enctype="multipart/form-data">
 						<div class="form-body">
 							<div class="form-group">
-								<label class="col-md-2 control-label">Nama Media Cetak</label>
-								<div class="col-md-10">
+								<label class="col-md-12 control-label">Nama File</label>
+								<div class="col-md-12">
 									<div class="input-icon right">
 										<i class="fa"></i>
-										<input type="text" class="form-control" name="media_name" placeholder="Nama Media Cetak" autocomplete="off" autofocus />
+										<input type="text" class="form-control" name="undangan_name" placeholder="Contoh: Andi dan Susi" autocomplete="off" autofocus />
 									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-2 control-label">Tanggal</label>
-								<div class="col-md-10">
+								<label class="col-md-12 control-label">Tanggal Acara</label>
+								<div class="col-md-12">
 									<div class="input-icon right">
 										<i class="fa"></i>
 										<input type="date" class="form-control" name="tanggal" placeholder="Tanggal" autocomplete="off" autofocus />
@@ -133,48 +105,51 @@ foreach($files as $file) {
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-2 control-label">File Upload</label>
-								<div class="col-md-10">
+								<label class="col-md-12 control-label">File Upload</label>
+								<small>max file size : kurang dari 2Mb</small>
+								<div class="col-md-12">
 									<div class="input-icon right">
 										<i class="fa"></i>
-										<input type="file" class="form-control" accept=".pdf" name="file_klipping" placeholder="File Klipping" autocomplete="off" autofocus />
+										<input type="file" class="form-control" accept=".pdf" name="file_undangan" placeholder="File Undangan" autocomplete="off" autofocus />
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="form-actions">
 							<div class="row">
-								<div class="col-md-offset-2 col-md-10">
-									<button type="submit" class="btn btn-success">
+								<div class="col-md-12" style="text-align:center;margin-top:10px;">
+									<button type="submit" class="btn btn-primary right">
 										<i class="fa fa-floppy-o"></i> Simpan
 									</button>
-									<a href="<?=site_url('admin/klipping');?>" type="button" class="btn btn-warning"><i class="fa fa-times"></i> Batal</a>
 								</div>
 							</div>
 						</div>
 					</form>
-					<div id="login">
-						 <!-- <button type="button" class="btn btn-info" data-bs-toggle="modal"data-bs-target="#login-modal"><i class="fa fa-power-off" aria-hidden="true"></i></button> -->
-					</div>
 				</div>
 				<div class="harijam"> 
 					<span id="tanggalwaktu"></span><br>
 					<span id="jam"></span>:<span id="menit"></span>:<span id="detik"></span> WIB
 				</div>    		
-				<div class="headmenu"><h4>Cari Edisi E-Kliping</h4></div>
+				<div class="headmenu"><h4>Cari Undangan</h4></div>
 				<input type="date" id="myInput" onchange="pdfSearch($(this).val())" value="<?php echo !empty($tgl) ? $tgl :''?>" />
 				<?php 
 					if (!empty($pdf_file['title'])) {
-						echo "<center><h5>Daftar Klipping :</h5></center>";
+						echo "<center><h5>Daftar Undangan :</h5></center>";
+					}
+					if (!empty($_GET['gagal'])) {
+						echo "<script>alert('Undangan Gagal Upload! Silahkan Ulangi Upload dengan ganti nama')</script>";
 					}
 				?>
 				<ul id="myUL">
 					<?php 
-					foreach ($pdf_file['title'] as $key => $value) {
-						echo '<li><a href="?tanggal='.$_GET["tanggal"].'&title='.$value.'">'.$value.'</a></li>';
-					} ?>
+						if (!empty($pdf_file['title'])) {
+							foreach ($pdf_file['title'] as $key => $value) {
+								echo '<li><a href="?tanggal='.$_GET["tanggal"].'&title='.$value.'">'.$value.'</a></li>';
+							} 
+						}
+					?>
 				</ul>
-				<div class="headmenu2"><h4>Statistik Pengunjung</h4></div>
+				<div class="headmenu2"><h6>Statistik Pengunjung</h6></div>
 				<table style="margin-left: auto; margin-right: auto;">
 					<tr>
 						<td>
@@ -248,10 +223,6 @@ foreach($files as $file) {
     <!-- /.modal -->
 </div>
 </html>
-
-<script type="text/javascript" src="https://dashboard.kuduskab.go.id/assets/libs/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="https://dashboard.kuduskab.go.id/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <script type="text/javascript">
 	window.setTimeout("waktu()", 1000);
 
@@ -278,7 +249,7 @@ foreach($files as $file) {
 		var hash = window.location.hash
       // window.location.reload()
       // console.log(s.hash());
-      s.setAttribute('source',"assets/books/"+hash+".pdf");
+      s.setAttribute('source',"reading/assets/books/"+hash+".pdf");
   }   
   function pdfSearch(tgl) {
   	location.href="?tanggal="+tgl;
@@ -286,77 +257,6 @@ foreach($files as $file) {
   function pdfSearchView(tgl,title) {
   	location.href="?tanggal="+tgl+"&title="+title;
   }
-</script>
-<script type="text/javascript" src="./js/bootstrap-fileinput.js"></script>
-<script type="text/javascript" src="./js/jquery.validate.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    var form        = $('#formInput');
-    var error       = $('.alert-danger', form);
-    var success     = $('.alert-success', form);
-
-    $("#formInput").validate({
-        errorElement: 'span',
-        errorClass: 'help-block help-block-error',
-        focusInvalid: false,
-        ignore: "",
-        rules: {
-            tanggal: { required: true },
-            media_name: { required: true },
-            file_klipping: { required: true },
-            
-        },
-        messages: {
-            tanggal: { required :'Tanggal Klipping required' },
-            media_name: { required :'Nama Media Klipping required'},
-            file_klipping: { required :'File Klipping required' }
-        },
-        invalidHandler: function (event, validator) {
-            success.hide();
-            error.show();
-            Metronic.scrollTo(error, -200);
-        },
-        errorPlacement: function (error, element) {
-            var icon = $(element).parent('.input-icon').children('i');
-            icon.removeClass('fa-check').addClass("fa-warning");
-            icon.attr("data-original-title", error.text()).tooltip({'container': 'body'});
-        },
-        highlight: function (element) {
-            $(element).closest('.form-group').removeClass("has-success").addClass('has-error');
-        },
-        unhighlight: function (element) {
-        },
-        success: function (label, element) {
-            var icon = $(element).parent('.input-icon').children('i');
-            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
-            icon.removeClass("fa-warning").addClass("fa-check");
-        },
-        submitHandler: function(form) {
-            dataString = new FormData($("#formInput")[0]);
-            $.ajax({
-                url: "<?='upload.php'?>",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                data: dataString,
-                success: function(data) {
-                    swal({
-                        title:"Sukses",
-                        text: "Simpan Data Sukses",
-                        showConfirmButton: false,
-                        type: "success",
-                        // timer: 2000
-                    }, function() {
-                        // window.location="<?=site_url('admin/klipping');?>";
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Error Simpan Data');
-                }
-            });
-        }
-    });
-});
 </script>
 <style type="text/css">
 	@media (min-width: 768px){
@@ -387,8 +287,14 @@ $(document).ready(function() {
 		text-align: -webkit-center;
 		padding-top: 10px;
 	}
+	.container{
+		background:#fff;
+	}
+	body{
+		background: #ea0882;
+	}
 	.headmenu{
-		background: #1e88e5;
+		background: #ea0882;
 		margin-top: 10px;
 		height: 40px;
 		border-top-right-radius: 26px;
@@ -398,7 +304,7 @@ $(document).ready(function() {
 	.headmenu2{
 		margin-top: 10px; 
 		margin-bottom: 10px;
-		background: #1e88e5;
+		background: #ea0882;
 		height: 40px;
 		border-top-left-radius: 26px;
 		padding-left: 20px;
@@ -416,6 +322,7 @@ $(document).ready(function() {
 		top: 0px;
 		padding-bottom:30px; 
 		/*width: 75%;*/
+		max-height: 100vh;
 		left: 0px;
 	}
 	.rigthpdf{
@@ -423,11 +330,13 @@ $(document).ready(function() {
 		/*width: 25%;*/
 		/*position: absolute;*/
 		right: 0px;
+		max-height: 100vh;
+    	overflow-y: scroll;
 	}
 	.headright{
 		width: 100%;
 		padding: 5px;
-		background: #1e88e5;
+		background: #ea0882;
 	}
 	.headimg{
 		margin-top: 12px;
@@ -478,8 +387,13 @@ $(document).ready(function() {
 		color: black;
 		display: block
 	}
-
+	.input-icon.right{
+		margin-top:-20px;
+	}
+	.form-group{
+		color:#fff;
+	}
 	#myUL li a:hover:not(.header) {
-		background-color: #1e88e5;
+		background-color: #ea0882;
 	}
 </style>
